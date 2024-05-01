@@ -64,7 +64,7 @@ namespace Fluxzy.Core.Pcap.Cli
             Console.WriteLine(receiverContext.Receiver!.ListeningPort);
 
             // Flush to ensure the client is not waiting forever 
-            await Console.Out.FlushAsync();
+            await Console.Out.FlushAsync(haltSource.Token);
 
             var loopingTask = receiverContext.WaitForExit();
 
@@ -72,8 +72,14 @@ namespace Fluxzy.Core.Pcap.Cli
             await Task.WhenAny(loopingTask, stdInClose, parentMonitoringTask);
 
             if (loopingTask.IsCompleted) {
-                Console.WriteLine($"Exiting with {loopingTask.Result} / {loopingTask.IsFaulted}");
-                Console.WriteLine($"{loopingTask.Exception?.ToString()}");
+                var payloadString = $"Exiting with {loopingTask.Result} / {loopingTask.IsFaulted}";
+
+                payloadString += $"{loopingTask.Exception?.ToString()}";
+
+                throw new Exception(payloadString);
+                
+                /*Console.WriteLine($"Exiting with {loopingTask.Result} / {loopingTask.IsFaulted}");
+                Console.WriteLine($"{loopingTask.Exception?.ToString()}");*/
                 return loopingTask.Result;
             }
 
