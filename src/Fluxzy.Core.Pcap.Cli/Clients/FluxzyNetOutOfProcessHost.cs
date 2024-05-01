@@ -38,7 +38,10 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 _process.Exited += ProcessOnExited;
                 _process.EnableRaisingEvents = true;
 
-                var stdErrorReadToEndPromise = _process.StandardError.ReadToEndAsync(); 
+                Task<string>? stdErrorReadToEndPromise = null; 
+                
+                if (FnpLog.LoggingEnabled)
+                    stdErrorReadToEndPromise = _process.StandardError.ReadToEndAsync(); 
 
                 var nextLine = await _process.StandardOutput.ReadLineAsync()
                                              // We wait 5s for the the process to be ready
@@ -66,8 +69,10 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 }
                 else {
                     if (FnpLog.LoggingEnabled) {
-                        var fullStderr = await stdErrorReadToEndPromise;
-                        FnpLog.Log("FullStderr: " + fullStderr);
+                        if (stdErrorReadToEndPromise != null) {
+                            var fullStderr = await stdErrorReadToEndPromise;
+                            FnpLog.Log("FullStderr: " + fullStderr);
+                        }
                     }
                 }
 

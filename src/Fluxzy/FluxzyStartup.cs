@@ -57,7 +57,14 @@ namespace Fluxzy.Cli
                         .CancelOnProcessTermination()
                         .UseExceptionHandler((e, context) => {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            context.Console.Error.WriteLine(e.Message);
+
+                            if (Environment.GetEnvironmentVariable("FLUXZY_DEBUG") == "1") {
+                                context.Console.Error.WriteLine(e.ToString());
+                            }
+                            else {
+                                context.Console.Error.WriteLine(e.Message);
+                            }
+                            
                             Console.ResetColor();
                             context.ExitCode = 1;
                         }, 1)
