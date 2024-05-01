@@ -37,7 +37,10 @@ namespace Fluxzy.Core.Pcap.Cli
         /// <returns></returns>
         private static async Task<int> Main(string[] args)
         {
-            Console.Error.WriteLine($"Started {Process.GetCurrentProcess().Id}");
+            var pid = Process.GetCurrentProcess().Id;
+            // var fullPath = $"/var/log/strace/{DateTime.Now.ToString("yyyy-MM-dd HHmmss")}-{pid}.log"; 
+            
+            Console.Error.WriteLine($"Started {pid}");
             
             if (args.Length < 1) {
                 Console.WriteLine("Usage : command pid. Received args : " + string.Join(" ", args));
