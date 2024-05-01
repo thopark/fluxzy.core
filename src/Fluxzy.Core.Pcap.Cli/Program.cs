@@ -37,7 +37,7 @@ namespace Fluxzy.Core.Pcap.Cli
         /// <returns></returns>
         private static async Task<int> Main(string[] args)
         {
-            Console.Error.WriteLine("Begin");
+            throw new Exception("Hello goodbye");
             
             if (args.Length < 1) {
                 Console.WriteLine("Usage : command pid. Received args : " + string.Join(" ", args));
