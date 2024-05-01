@@ -37,8 +37,6 @@ namespace Fluxzy.Core.Pcap.Cli
         /// <returns></returns>
         private static async Task<int> Main(string[] args)
         {
-            throw new Exception("Hello goodbye");
-            
             if (args.Length < 1) {
                 Console.WriteLine("Usage : command pid. Received args : " + string.Join(" ", args));
 
@@ -73,8 +71,11 @@ namespace Fluxzy.Core.Pcap.Cli
             // We halt the process when one of the following task is complete task is completed
             await Task.WhenAny(loopingTask, stdInClose, parentMonitoringTask);
 
-            if (loopingTask.IsCompleted)
+            if (loopingTask.IsCompleted) {
+                Console.WriteLine($"Exiting with {loopingTask.Result} / {loopingTask.IsFaulted}");
+                Console.WriteLine($"{loopingTask.Exception?.ToString()}");
                 return loopingTask.Result;
+            }
 
             if (stdInClose.IsCompleted)
                 return 11;
