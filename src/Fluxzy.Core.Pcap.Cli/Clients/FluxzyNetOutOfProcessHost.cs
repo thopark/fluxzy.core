@@ -9,6 +9,7 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
     public class FluxzyNetOutOfProcessHost : IOutOfProcessHost
     {
         private Process? _process;
+        private Task<string>? _stdErrorReadToEndPromise;
 
         public int Port { get; private set; }
 
@@ -38,10 +39,10 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 _process.Exited += ProcessOnExited;
                 _process.EnableRaisingEvents = true;
 
-                Task<string>? stdErrorReadToEndPromise = null; 
+                _stdErrorReadToEndPromise = null; 
                 
                 if (FnpLog.LoggingEnabled)
-                    stdErrorReadToEndPromise = _process.StandardError.ReadToEndAsync(); 
+                    _stdErrorReadToEndPromise = _process.StandardError.ReadToEndAsync(); 
 
                 var nextLine = await _process.StandardOutput.ReadLineAsync()
                                              // We wait 5s for the the process to be ready
@@ -60,7 +61,7 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
 
                         FnpLog.Log("FullStdout: " + fullStdout);
 
-                        var fullStderr = await stdErrorReadToEndPromise;
+                        var fullStderr = await _stdErrorReadToEndPromise;
 
                         FnpLog.Log("FullStderr: " + fullStderr);
                     }
@@ -68,12 +69,6 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                     return false; // Did not receive port number
                 }
                 else {
-                    if (FnpLog.LoggingEnabled) {
-                        if (stdErrorReadToEndPromise != null) {
-                            var fullStderr = await stdErrorReadToEndPromise;
-                            FnpLog.Log("FullStderr: " + fullStderr);
-                        }
-                    }
                 }
 
                 Port = port;
@@ -114,7 +109,7 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
             _process?.Dispose();
         }
 
-        private void ProcessOnExited(object? sender, EventArgs e)
+        private async void ProcessOnExited(object? sender, EventArgs e)
         {
             FaultedOrDisposed = true;
 
@@ -124,7 +119,12 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
 
                 if (FnpLog.LoggingEnabled) {
                     FnpLog.Log($"FluxzyNetOutOfProcessHost exited with exit code: {_process.ExitCode}");
-                    return;
+                    
+                    
+                    if (_stdErrorReadToEndPromise != null) {
+                        var fullStderr = await _stdErrorReadToEndPromise; // HANGING FOREVER
+                        FnpLog.Log("FullStderr: " + fullStderr);
+                    }
                 }
             }
         }
