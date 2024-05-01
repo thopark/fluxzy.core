@@ -107,8 +107,9 @@ namespace Fluxzy.Core.Pcap.Cli
 
                 return 81;
             }
-            catch (Exception) {
+            catch (Exception ex) {
                 // TODO set logger here 
+                Console.Error.WriteLine(ex.ToString());
                 return 90;
             }
             finally {

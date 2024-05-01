@@ -14,6 +14,7 @@ namespace Fluxzy.Core
         private readonly Func<IOutOfProcessHost>? _captureHostBuilder;
         private IOutOfProcessHost? _currentCaptureHost;
 
+        // Direct capture context
         public ProxyScope(
             Func<IOutOfProcessHost, ICaptureContext> captureContextBuilder)
         {
@@ -21,6 +22,11 @@ namespace Fluxzy.Core
             _captureContextBuilder = captureContextBuilder;
         }
 
+        /// <summary>
+        ///  External with fluxzynetcap
+        /// </summary>
+        /// <param name="captureHostBuilder"></param>
+        /// <param name="captureContextBuilder"></param>
         public ProxyScope(
             Func<IOutOfProcessHost> captureHostBuilder,
             Func<IOutOfProcessHost, ICaptureContext> captureContextBuilder)
