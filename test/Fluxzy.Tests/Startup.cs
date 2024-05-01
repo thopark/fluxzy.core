@@ -28,6 +28,8 @@ namespace Fluxzy.Tests
         public Startup(IMessageSink messageSink)
             : base(messageSink)
         {
+            Environment.SetEnvironmentVariable("ELEVATED", "1");
+            
             foreach (var fileSystemInfo in new DirectoryInfo(".").EnumerateFileSystemInfos().ToList())
             {
                 if (fileSystemInfo is DirectoryInfo directory && Guid.TryParse(directory.Name, out _))

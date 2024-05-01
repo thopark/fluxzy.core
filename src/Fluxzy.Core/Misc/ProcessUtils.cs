@@ -216,16 +216,28 @@ namespace Fluxzy.Misc
                 return osXProcess;
             }
 
-            // For other OS we use pkexec
+            if (Environment.GetEnvironmentVariable("ELEVATED") == "1") {
+                // For other OS we use pkexec
+                var process = Process.Start(new ProcessStartInfo(commandName, $"{fullArgs}") {
+                    UseShellExecute = false,
+                    RedirectStandardOutput = redirectStdOut,
+                    RedirectStandardInput = redirectStdOut,
+                    RedirectStandardError = redirectStandardError,
+                });
 
-            var process = Process.Start(new ProcessStartInfo("pkexec", $"\"{commandName}\" {fullArgs}") {
-                UseShellExecute = false,
-                RedirectStandardOutput = redirectStdOut,
-                RedirectStandardInput = redirectStdOut,
-                RedirectStandardError = redirectStandardError,
-            });
+                return process;
+            }
+            else {
+                // For other OS we use pkexec
+                var process = Process.Start(new ProcessStartInfo("pkexec", $"\"{commandName}\" {fullArgs}") {
+                    UseShellExecute = false,
+                    RedirectStandardOutput = redirectStdOut,
+                    RedirectStandardInput = redirectStdOut,
+                    RedirectStandardError = redirectStandardError,
+                });
 
-            return process;
+                return process;
+            }
         }
 
         public static Process? RunElevated(
