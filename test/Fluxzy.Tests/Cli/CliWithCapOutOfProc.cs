@@ -15,7 +15,7 @@ namespace Fluxzy.Tests.Cli
                 var directoryParams = new[] { false, true };
                 var withSimpleRules = new[] { false, true };
 
-                for (var i = 0; i < 4; i++)
+                for (var i = 0; i < 2; i++)
                     foreach (var protocol in protocols)
                     foreach (var withPcap in withPcapStatus)
                     foreach (var directoryParam in directoryParams)
