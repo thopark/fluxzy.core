@@ -15,18 +15,19 @@ namespace Fluxzy.Tests.Cli
                 var directoryParams = new[] { false, true };
                 var withSimpleRules = new[] { false, true };
 
-                foreach (var protocol in protocols)
-                foreach (var withPcap in withPcapStatus)
-                foreach (var directoryParam in directoryParams)
-                foreach (var withSimpleRule in withSimpleRules) {
-                    yield return new object[] { protocol, withPcap, directoryParam, withSimpleRule };
-                }
+                for (var i = 0; i < 4; i++)
+                    foreach (var protocol in protocols)
+                    foreach (var withPcap in withPcapStatus)
+                    foreach (var directoryParam in directoryParams)
+                    foreach (var withSimpleRule in withSimpleRules) {
+                        yield return new object[] { protocol, withPcap, directoryParam, withSimpleRule, i};
+                    }
             }
         }
 
         [Theory]
         [MemberData(nameof(GetSingleRequestParametersNoDecrypt))]
-        public async Task Run(string proto, CaptureType rawCap, bool @out, bool rule)
+        public async Task Run(string proto, CaptureType rawCap, bool @out, bool rule, int _)
         {
             await base.Run_Cli_Output(proto, rawCap, @out, rule);
         }
