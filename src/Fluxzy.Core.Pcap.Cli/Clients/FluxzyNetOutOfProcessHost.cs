@@ -120,7 +120,7 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 _process.Exited -= ProcessOnExited; // Detach process
 
                 if (FnpLog.LoggingEnabled) {
-                    FnpLog.Log($"FluxzyNetOutOfProcessHost exited with exit code: {_process.ExitCode}");
+                    FnpLog.Log($"FluxzyNetOutOfProcessHost exited with exit code: {_process.ExitCode} [{_process.Id}]");
                     
                     
                     if (_stdErrorReadToEndPromise != null) {
