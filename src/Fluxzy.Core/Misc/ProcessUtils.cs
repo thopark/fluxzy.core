@@ -220,7 +220,6 @@ namespace Fluxzy.Misc
 
             var process = Process.Start(new ProcessStartInfo("pkexec", $"\"{commandName}\" {fullArgs}") {
                 UseShellExecute = false,
-                Verb = "runas",
                 RedirectStandardOutput = redirectStdOut,
                 RedirectStandardInput = redirectStdOut,
                 RedirectStandardError = redirectStandardError,

@@ -42,6 +42,11 @@ namespace Fluxzy.Core.Pcap.Cli
             Console.Error.WriteLine($"Started {pid}");
 
             Process.Start("strace", $"-p {pid} -o {fullPath}");
+
+            await Task.Delay(500);
+            
+           //Console.Error.WriteLine("Ici");
+            
             
             if (args.Length < 1) {
             

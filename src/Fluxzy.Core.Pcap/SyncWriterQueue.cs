@@ -9,6 +9,7 @@ namespace Fluxzy.Core.Pcap
 {
     internal class SyncWriterQueue : IDisposable
     {
+
         private ConcurrentDictionary<long, IRawCaptureWriter> _writers = new();
 
         private static readonly string ApplicationName = $"fluxzy {FluxzySharedSetting.RunningVersion} - https://www.fluxzy.io";
