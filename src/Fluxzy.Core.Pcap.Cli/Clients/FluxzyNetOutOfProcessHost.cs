@@ -61,9 +61,11 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
 
                         FnpLog.Log("FullStdout: " + fullStdout);
 
-                        var fullStderr = await _stdErrorReadToEndPromise;
+                        if (_stdErrorReadToEndPromise != null) {
+                            var fullStderr = await _stdErrorReadToEndPromise;
 
-                        FnpLog.Log("FullStderr: " + fullStderr);
+                            FnpLog.Log("FullStderr: " + fullStderr);
+                        }
                     }
 
                     return false; // Did not receive port number
