@@ -72,7 +72,7 @@ namespace Fluxzy.Core.Pcap.Cli
             await Task.WhenAny(loopingTask, stdInClose, parentMonitoringTask);
 
             if (loopingTask.IsCompleted) {
-                var payloadString = $"Exiting with {loopingTask.Result} / {loopingTask.IsFaulted}";
+                var payloadString = $"Exiting with {loopingTask.IsFaulted}";
 
                 payloadString += $"{loopingTask.Exception?.ToString()}";
 
