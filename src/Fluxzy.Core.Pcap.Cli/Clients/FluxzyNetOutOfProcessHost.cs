@@ -38,6 +38,8 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 _process.Exited += ProcessOnExited;
                 _process.EnableRaisingEvents = true;
 
+                var stdErrorReadToEndPromise = _process.StandardError.ReadToEndAsync(); 
+
                 var nextLine = await _process.StandardOutput.ReadLineAsync()
                                              // We wait 5s for the the process to be ready
                                              .WaitAsync(TimeSpan.FromSeconds(300));
@@ -55,7 +57,7 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
 
                         FnpLog.Log("FullStdout: " + fullStdout);
 
-                        var fullStderr = await _process.StandardError.ReadToEndAsync();
+                        var fullStderr = await stdErrorReadToEndPromise;
 
                         FnpLog.Log("FullStderr: " + fullStderr);
                     }
@@ -110,7 +112,6 @@ namespace Fluxzy.Core.Pcap.Cli.Clients
                 _process.Exited -= ProcessOnExited; // Detach process
 
                 if (FnpLog.LoggingEnabled) {
-
                     FnpLog.Log($"FluxzyNetOutOfProcessHost exited with exit code: {_process.ExitCode}");
                     return;
                 }

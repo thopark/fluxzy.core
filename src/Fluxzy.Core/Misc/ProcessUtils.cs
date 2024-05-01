@@ -223,7 +223,7 @@ namespace Fluxzy.Misc
                 Verb = "runas",
                 RedirectStandardOutput = redirectStdOut,
                 RedirectStandardInput = redirectStdOut,
-                RedirectStandardError = redirectStandardError
+                RedirectStandardError = redirectStandardError,
             });
 
             return process;
